@@ -52,6 +52,26 @@ app.post("/sign-up", async (req, res) => {
     }
 });
 
+//Log-in
+app.post("/log-in", async (req, res) => {
+    let {email, password} = req.body;
+
+    const {data} = await supabase
+        .from("hd_users")
+        .select()
+        .eq("email", email);
+
+    if (data.length!==0) {
+        if (data[0].password === password) {
+            res.send("success");
+        } else {
+            res.send("wrong-pass");
+        }
+    } else {
+        res.send("no-acc");
+    }
+});
+
 //Server Listener
 app.listen(port, () => {
     console.log("The server is listening on http://localhost:" + port);
